@@ -1,6 +1,7 @@
 package com.financas.api_finacas.service;
 
 
+import com.financas.api_finacas.dto.ResumoFinanceiroDTO;
 import com.financas.api_finacas.dto.TransacaoRequestDTO;
 import com.financas.api_finacas.dto.TransacaoResponseDTO;
 import com.financas.api_finacas.model.TipoTransacao;
@@ -56,7 +57,7 @@ public class TransacaoService {
     }
 
 
-    public ResumoFinaceiroDTO obterResumo(){
+    public ResumoFinanceiroDTO obterResumo(){
         BigDecimal totalReceitas = repository.sumByTipo(TipoTransacao.RECEITA);
         BigDecimal totalDespesas = repository.sumByTipo(TipoTransacao.DESPESA);
 
@@ -64,7 +65,7 @@ public class TransacaoService {
         if(totalDespesas == null) totalDespesas = BigDecimal.ZERO;
 
         BigDecimal saldo = totalReceitas.subtract(totalDespesas);
-        return new ResumoFinaceiroDTO(totalReceitas, totalDespesas, saldo);
+        return new ResumoFinanceiroDTO(totalReceitas, totalDespesas, saldo);
     }
 
 

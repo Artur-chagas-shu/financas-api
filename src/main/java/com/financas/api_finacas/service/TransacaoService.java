@@ -9,7 +9,7 @@ import com.financas.api_finacas.model.Transacao;
 import com.financas.api_finacas.repository.TransacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.reactive.TransactionalOperator;
+
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -20,8 +20,7 @@ public class TransacaoService {
 
     @Autowired
     private TransacaoRepository repository;
-    @Autowired
-    private TransactionalOperator transactionalOperator;
+
 
     public TransacaoResponseDTO criar(TransacaoRequestDTO dto) {
         TipoTransacao tipo = TipoTransacao.valueOf(dto.getTipo().toUpperCase());

@@ -4,7 +4,6 @@ package com.financas.api_finacas.controller;
 import com.financas.api_finacas.dto.ResumoFinanceiroDTO;
 import com.financas.api_finacas.dto.TransacaoRequestDTO;
 import com.financas.api_finacas.dto.TransacaoResponseDTO;
-import com.financas.api_finacas.model.Transacao;
 import com.financas.api_finacas.service.TransacaoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +47,12 @@ public class TransacaoController {
     @GetMapping("/resumo")
     public ResponseEntity<ResumoFinanceiroDTO> obterResumo(){
         return ResponseEntity.ok(service.obterResumo());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        service.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

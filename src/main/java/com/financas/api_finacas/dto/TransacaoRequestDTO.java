@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Positive;
 
 import java.math.BigDecimal;
 
-public class TrasacaoRequestDTO {
+public class TransacaoRequestDTO {
 
 
     @NotBlank(message="Descrição é obrigatoria")
@@ -17,7 +17,7 @@ public class TrasacaoRequestDTO {
     private BigDecimal valor;
 
     @NotBlank(message = "Tipo é obrigatorio (RECEITA ou DESPESA)")
-    private string tipo ;
+    private String tipo ;
 
     @NotBlank(message = "Categoria é obrigatoria")
     private String categoria;
@@ -38,11 +38,11 @@ public class TrasacaoRequestDTO {
         this.valor = valor;
     }
 
-    public string getTipo() {
+    public String getTipo() {
         return tipo;
     }
 
-    public void setTipo(string tipo) {
+    public void setTipo(String tipo) {
         this.tipo = tipo;
     }
 

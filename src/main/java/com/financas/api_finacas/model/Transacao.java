@@ -40,13 +40,12 @@ public class Transacao {
     public Transacao() {
     }
 
-    public Transacao(long id, String descricao, BigDecimal valor, TipoTransacao tipo, String categoria, LocalDateTime dataCriacao) {
-        this.id = id;
+    public Transacao( String descricao, BigDecimal valor, TipoTransacao tipo, String categoria) {
         this.descricao = descricao;
         this.valor = valor;
         this.tipo = tipo;
         this.categoria = categoria;
-        this.dataCriacao = dataCriacao;
+        this.dataCriacao = LocalDateTime.now();
     }
 
     public long getId() {

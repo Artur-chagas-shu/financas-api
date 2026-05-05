@@ -6,12 +6,12 @@ public class ResumoFinanceiroDTO {
 
     private BigDecimal totalDespesas;
     private BigDecimal totalReceitas;
-    private BigDecimal saldos;
+    private BigDecimal saldo;
 
-    public ResumoFinanceiroDTO(BigDecimal totalDespesas, BigDecimal totalReceitas, BigDecimal saldos) {
-        this.totalDespesas = totalDespesas;
+    public ResumoFinanceiroDTO(BigDecimal totalReceitas, BigDecimal totalDespesas, BigDecimal saldo) {
         this.totalReceitas = totalReceitas;
-        this.saldos = saldos;
+        this.totalDespesas = totalDespesas;
+        this.saldo = saldo;
     }
 
     public BigDecimal getTotalDespesas() {
@@ -22,7 +22,7 @@ public class ResumoFinanceiroDTO {
         return totalReceitas;
     }
 
-    public BigDecimal getSaldos() {
-        return saldos;
+    public BigDecimal getSaldo() {
+        return saldo;
     }
 }

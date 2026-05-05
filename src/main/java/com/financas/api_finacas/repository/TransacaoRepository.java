@@ -20,8 +20,7 @@ public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
 
     List<Transacao> findByDataCriacaoBetween(LocalDateTime inicio, LocalDateTime fim);
 
-    @Query("SELECT SUM(t.valor) FROM Transacao t WHERE t.tipo =:tipo")
-    BigDecimal  sumByTipo(@Param("tipo") TipoTransacao tipo);
-
+    @Query("SELECT SUM(t.valor) FROM Transacao t WHERE t.tipo = :tipo")
+    BigDecimal sumByTipo(@Param("tipo") TipoTransacao tipo);
 
 }

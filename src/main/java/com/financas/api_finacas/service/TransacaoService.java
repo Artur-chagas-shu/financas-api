@@ -56,15 +56,21 @@ public class TransacaoService {
     }
 
 
-    public ResumoFinanceiroDTO obterResumo(){
+    public ResumoFinanceiroDTO obterResumo() {
         BigDecimal totalReceitas = repository.sumByTipo(TipoTransacao.RECEITA);
         BigDecimal totalDespesas = repository.sumByTipo(TipoTransacao.DESPESA);
+        System.out.println("Receitas (RECEITA): " + repository.sumByTipo(TipoTransacao.RECEITA));
+        System.out.println("Despesas (DESPESA): " + repository.sumByTipo(TipoTransacao.DESPESA));
 
-        if(totalReceitas == null) totalReceitas = BigDecimal.ZERO;
-        if(totalDespesas == null) totalDespesas = BigDecimal.ZERO;
+        if (totalReceitas == null) totalReceitas = BigDecimal.ZERO;
+        if (totalDespesas == null) totalDespesas = BigDecimal.ZERO;
 
-        BigDecimal saldo = totalReceitas.subtract(totalDespesas);
+        BigDecimal saldo = totalReceitas.subtract(totalDespesas); // ← ordem correta
+
+
         return new ResumoFinanceiroDTO(totalReceitas, totalDespesas, saldo);
+
+
     }
 
 

@@ -7,8 +7,12 @@ import com.financas.api_finacas.dto.TransacaoResponseDTO;
 import com.financas.api_finacas.model.TipoTransacao;
 import com.financas.api_finacas.model.Transacao;
 import com.financas.api_finacas.model.Usuario;
+import com.financas.api_finacas.repository.UsuarioRepository;
+import com.financas.api_finacas.service.UsuarioService;
 import com.financas.api_finacas.repository.TransacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 
@@ -21,10 +25,22 @@ public class TransacaoService {
 
     @Autowired
     private TransacaoRepository repository;
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    private Usuario getUsuarioLogado(){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(principal instanceof UserDetails){
+            String email = ((UserDetails) principal).getUsername();
+            return usuarioRepository.findByEmail(email)
+                    .orElseThrow(()-> new RuntimeException("Usuario não encontrado"));
+        }
+        throw new RuntimeException("Usuario não autenticado");
+    }
 
 
     public TransacaoResponseDTO criar(TransacaoRequestDTO dto) {
-        Usuario usuarioLogado = obterUsuarioLogado();
+        Usuario usuarioLogado = getUsuarioLogado();
         TipoTransacao tipo = TipoTransacao.valueOf(dto.getTipo().toUpperCase());
         Transacao transacao = new Transacao(dto.getDescricao(), dto.getValor(), tipo, dto.getCategoria());
         transacao.setUsuario(usuarioLogado);

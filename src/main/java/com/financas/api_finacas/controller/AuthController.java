@@ -31,7 +31,7 @@ public class AuthController {
             String senha = dados.get("senha");
 
             Usuario usuario = usuarioService.cadastrar(nome, email,senha);
-            return new ResponseEntity.ok(Map.of("message", "Usuário criado com sucesso!", "id", usuario.getId()));
+            return ResponseEntity.ok(Map.of("message", "Usuário criado com sucesso!", "id", usuario.getId()));
         }catch (Exception e){
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
@@ -44,7 +44,7 @@ public class AuthController {
         String senha = credenciais.get("senha");
 
         Optional<Usuario> usuarioOpt = usuarioService.buscarPorEmail(email);
-        if(usuarioOpt.isPresent() || !usuarioService.validarSenha(senha,usuarioOpt.get().getSenha())){
+        if(usuarioOpt.isEmpty() || !usuarioService.validarSenha(senha,usuarioOpt.get().getSenha())){
             return ResponseEntity.status(401).body(Map.of("error", "Email ou Senha inválidos"));
         }
 

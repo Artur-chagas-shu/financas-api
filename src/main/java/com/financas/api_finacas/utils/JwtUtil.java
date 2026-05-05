@@ -6,6 +6,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Value;
+import io.jsonwebtoken.io.Decoders;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -20,8 +21,9 @@ public class JwtUtil{
     private Long expiration;
 
 
-    private SecretKey getSigningKey(){
-        return Keys.hmacShaKey(secret.getBytes());
+    private SecretKey getSigningKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(secret);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
     public String gerarToken(String email){

@@ -3,9 +3,6 @@ package com.financas.api_finacas.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import org.springframework.data.annotation.Id;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

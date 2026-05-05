@@ -37,14 +37,19 @@ public class Transacao {
     @Column(name="data_criacao", nullable = false, updatable = false)
     private LocalDateTime dataCriacao;
 
+    @ManyToOne
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario usuario;
+
     public Transacao() {
     }
 
-    public Transacao( String descricao, BigDecimal valor, TipoTransacao tipo, String categoria) {
+    public Transacao( String descricao, BigDecimal valor, TipoTransacao tipo, String categoria, Usuario usuario) {
         this.descricao = descricao;
         this.valor = valor;
         this.tipo = tipo;
         this.categoria = categoria;
+        this.usuario = usuario;
         this.dataCriacao = LocalDateTime.now();
     }
 
@@ -94,5 +99,13 @@ public class Transacao {
 
     public void setDataCriacao(LocalDateTime dataCriacao) {
         this.dataCriacao = dataCriacao;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }

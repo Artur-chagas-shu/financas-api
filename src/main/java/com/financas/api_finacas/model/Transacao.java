@@ -44,7 +44,15 @@ public class Transacao {
     public Transacao() {
     }
 
-    public Transacao( String descricao, BigDecimal valor, TipoTransacao tipo, String categoria, Usuario usuario) {
+    public Transacao( String descricao, BigDecimal valor,  TipoTransacao tipo, String categoria) {
+        this.descricao = descricao;
+        this.valor = valor;
+        this.tipo = tipo;
+        this.categoria = categoria;
+        this.dataCriacao = LocalDateTime.now();
+    }
+
+    public Transacao(String descricao, BigDecimal valor, TipoTransacao tipo, String categoria, Usuario usuario) {
         this.descricao = descricao;
         this.valor = valor;
         this.tipo = tipo;

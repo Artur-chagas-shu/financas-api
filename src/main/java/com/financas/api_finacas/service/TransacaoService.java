@@ -6,6 +6,7 @@ import com.financas.api_finacas.dto.TransacaoRequestDTO;
 import com.financas.api_finacas.dto.TransacaoResponseDTO;
 import com.financas.api_finacas.model.TipoTransacao;
 import com.financas.api_finacas.model.Transacao;
+import com.financas.api_finacas.model.Usuario;
 import com.financas.api_finacas.repository.TransacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,8 +24,10 @@ public class TransacaoService {
 
 
     public TransacaoResponseDTO criar(TransacaoRequestDTO dto) {
+        Usuario usuarioLogado = obterUsuarioLogado();
         TipoTransacao tipo = TipoTransacao.valueOf(dto.getTipo().toUpperCase());
         Transacao transacao = new Transacao(dto.getDescricao(), dto.getValor(), tipo, dto.getCategoria());
+        transacao.setUsuario(usuarioLogado);
         Transacao salva = repository.save(transacao);
         return toResponseDTO(salva);
     }

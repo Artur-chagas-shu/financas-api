@@ -8,7 +8,6 @@ import com.financas.api_finacas.model.TipoTransacao;
 import com.financas.api_finacas.model.Transacao;
 import com.financas.api_finacas.model.Usuario;
 import com.financas.api_finacas.repository.UsuarioRepository;
-import com.financas.api_finacas.service.UsuarioService;
 import com.financas.api_finacas.repository.TransacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -49,7 +48,11 @@ public class TransacaoService {
     }
 
     public List<TransacaoResponseDTO> listarTodos() {
-        return repository.findAll().stream().map(this::toResponseDTO).collect(Collectors.toList());
+        Usuario usuarioLogado = getUsuarioLogado();
+        List<Transacao> transacoes = repository.findByUsuario(usuarioLogado);
+        return transacoes.stream()
+                .map(this::toResponseDTO)
+                .collect(Collectors.toList());
     }
 
     public TransacaoResponseDTO buscarPorId(Long id){

@@ -2,6 +2,7 @@ package com.financas.api_finacas.repository;
 
 import com.financas.api_finacas.model.TipoTransacao;
 import com.financas.api_finacas.model.Transacao;
+import com.financas.api_finacas.model.Usuario;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,7 +21,11 @@ public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
 
     List<Transacao> findByDataCriacaoBetween(LocalDateTime inicio, LocalDateTime fim);
 
+    List<Transacao> findByUsuario(Usuario usuario);
+
+
     @Query("SELECT SUM(t.valor) FROM Transacao t WHERE t.tipo = :tipo")
     BigDecimal sumByTipo(@Param("tipo") TipoTransacao tipo);
 
+    Usuario usuario(Usuario usuario);
 }

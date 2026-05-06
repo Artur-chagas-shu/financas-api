@@ -28,7 +28,6 @@ log/
 application-local.properties
 application-dev.properties
 application-prod.properties
-application.properties
 application.yml
 *.pid
 

@@ -23,9 +23,9 @@ public interface TransacaoRepository extends JpaRepository<Transacao, Long> {
 
     List<Transacao> findByUsuario(Usuario usuario);
 
-
     @Query("SELECT SUM(t.valor) FROM Transacao t WHERE t.tipo = :tipo")
     BigDecimal sumByTipo(@Param("tipo") TipoTransacao tipo);
 
-    Usuario usuario(Usuario usuario);
+    @Query("SELECT SUM(t.valor) FROM Transacao t WHERE t.tipo = :tipo AND t.usuario = :usuario")
+    BigDecimal sumByTipoAndUsuario(@Param("tipo") TipoTransacao tipo, @Param("usuario") Usuario usuario);
 }

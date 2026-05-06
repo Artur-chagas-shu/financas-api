@@ -23,7 +23,7 @@ public class TransacaoController {
 
     @GetMapping
     public ResponseEntity<List<TransacaoResponseDTO>> ListarTodas()  {
-        return ResponseEntity.ok(service.listarTodos());
+        return ResponseEntity.ok(service.listarTodas());
     }
 
     @GetMapping("/{id}")

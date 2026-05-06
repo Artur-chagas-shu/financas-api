@@ -27,16 +27,15 @@ public class TransacaoService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    private Usuario getUsuarioLogado(){
+    private Usuario getUsuarioLogado() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(principal instanceof UserDetails){
+        if (principal instanceof UserDetails) {
             String email = ((UserDetails) principal).getUsername();
             return usuarioRepository.findByEmail(email)
-                    .orElseThrow(()-> new RuntimeException("Usuario não encontrado"));
+                    .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
         }
-        throw new RuntimeException("Usuario não autenticado");
+        throw new RuntimeException("Usuário não autenticado");
     }
-
 
     public TransacaoResponseDTO criar(TransacaoRequestDTO dto) {
         Usuario usuarioLogado = getUsuarioLogado();
@@ -47,21 +46,31 @@ public class TransacaoService {
         return toResponseDTO(salva);
     }
 
-    public List<TransacaoResponseDTO> listarTodos() {
-        Usuario usuarioLogado = getUsuarioLogado();
-        List<Transacao> transacoes = repository.findByUsuario(usuarioLogado);
-        return transacoes.stream()
+    public List<TransacaoResponseDTO> listarTodas() {
+        Usuario usuario = getUsuarioLogado();
+        return repository.findByUsuario(usuario)
+                .stream()
                 .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }
 
-    public TransacaoResponseDTO buscarPorId(Long id){
-        Transacao transacao = repository.findById(id).orElseThrow(()-> new RuntimeException("Transação não encontrada com id " + id));
+    public TransacaoResponseDTO buscarPorId(Long id) {
+        Usuario usuario = getUsuarioLogado();
+        Transacao transacao = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Transação não encontrada com id " + id));
+        if (!transacao.getUsuario().getId().equals(usuario.getId())) {
+            throw new RuntimeException("Acesso negado a esta transação");
+        }
         return toResponseDTO(transacao);
     }
 
-    public TransacaoResponseDTO atualizar(Long id, TransacaoRequestDTO dto){
-        Transacao transacao = repository.findById(id).orElseThrow(()-> new RuntimeException("Transação não encotrada "));
+    public TransacaoResponseDTO atualizar(Long id, TransacaoRequestDTO dto) {
+        Usuario usuario = getUsuarioLogado();
+        Transacao transacao = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Transação não encontrada"));
+        if (!transacao.getUsuario().getId().equals(usuario.getId())) {
+            throw new RuntimeException("Acesso negado a esta transação");
+        }
         transacao.setDescricao(dto.getDescricao());
         transacao.setValor(dto.getValor());
         transacao.setTipo(TipoTransacao.valueOf(dto.getTipo().toUpperCase()));
@@ -70,42 +79,29 @@ public class TransacaoService {
         return toResponseDTO(atualizada);
     }
 
-    public void deletar(Long id){
-        if(!repository.existsById(id)){
-            throw new RuntimeException("Transação não encontrada");
+    public void deletar(Long id) {
+        Usuario usuario = getUsuarioLogado();
+        Transacao transacao = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Transação não encontrada"));
+        if (!transacao.getUsuario().getId().equals(usuario.getId())) {
+            throw new RuntimeException("Acesso negado a esta transação");
         }
         repository.deleteById(id);
     }
 
-
     public ResumoFinanceiroDTO obterResumo() {
-        BigDecimal totalReceitas = repository.sumByTipo(TipoTransacao.RECEITA);
-        BigDecimal totalDespesas = repository.sumByTipo(TipoTransacao.DESPESA);
-        System.out.println("Receitas (RECEITA): " + repository.sumByTipo(TipoTransacao.RECEITA));
-        System.out.println("Despesas (DESPESA): " + repository.sumByTipo(TipoTransacao.DESPESA));
+        Usuario usuario = getUsuarioLogado();
+        BigDecimal totalReceitas = repository.sumByTipoAndUsuario(TipoTransacao.RECEITA, usuario);
+        BigDecimal totalDespesas = repository.sumByTipoAndUsuario(TipoTransacao.DESPESA, usuario);
 
         if (totalReceitas == null) totalReceitas = BigDecimal.ZERO;
         if (totalDespesas == null) totalDespesas = BigDecimal.ZERO;
 
-        BigDecimal saldo = totalReceitas.subtract(totalDespesas); // ← ordem correta
-
-
+        BigDecimal saldo = totalReceitas.subtract(totalDespesas);
         return new ResumoFinanceiroDTO(totalReceitas, totalDespesas, saldo);
-
-
     }
 
-
-
-
-
-
-
-
-
-
-
-    private TransacaoResponseDTO toResponseDTO(Transacao transacao){
+    private TransacaoResponseDTO toResponseDTO(Transacao transacao) {
         return new TransacaoResponseDTO(
                 transacao.getId(),
                 transacao.getDescricao(),
@@ -115,5 +111,5 @@ public class TransacaoService {
                 transacao.getDataCriacao()
         );
     }
-
 }
+

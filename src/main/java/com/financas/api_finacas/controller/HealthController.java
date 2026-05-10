@@ -6,10 +6,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
+@RequestMapping("/api")
 public class HealthController {
 
-    @GetMapping("/health")
-    public String health(){
+    @RequestMapping("/health")
+    public String health() {
         return "OK";
     }
 }
